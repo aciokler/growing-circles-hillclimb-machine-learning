@@ -7,7 +7,7 @@ import algorithms.hillclimbsearch.EvaluationFunction;
 public class EvaluationOfClassifier implements EvaluationFunction<CircleClassifier, Double, Boolean, Position> {
 
 	@Override
-	public Double evaluate(CircleClassifier currentState, CircleClassifier finalState, List<Position> trainingSet) {
+	public Double evaluate(CircleClassifier currentState, List<Position> trainingSet) {
 		int successfullyClassifiedCount = 0;
 		for (Position pos : trainingSet) {
 			double distanceFromCenterOfCircle = Math

@@ -23,7 +23,7 @@ public class HillClimbClassifierSearch<STATE extends ClassifierState, OPERATOR e
 		this.operatorApplier = operatorApplier;
 	}
 
-	public boolean findClassifier(STATE initialClassifierState, STATE finalClassifierState, List<INPUT> trainingSet,
+	public STATE findClassifier(STATE initialClassifierState, STATE finalClassifierState, List<INPUT> trainingSet,
 			int maxNumberOfTries) {
 
 		int numberOfTries = 0;
@@ -35,7 +35,7 @@ public class HillClimbClassifierSearch<STATE extends ClassifierState, OPERATOR e
 			if (state.equals(finalClassifierState)) {
 				System.out.println("tries: " + numberOfTries);
 				System.out.println(state);
-				return true;
+				return state;
 			}
 			seenClassifiers.add(state);
 
@@ -49,8 +49,8 @@ public class HillClimbClassifierSearch<STATE extends ClassifierState, OPERATOR e
 			}
 
 			// sort new states
-			Collections.sort(newClassifierStates, new StateComparator<STATE, EVALRET, CLASSES, INPUT>(
-					evaluationFunction, finalClassifierState, trainingSet));
+			Collections.sort(newClassifierStates,
+					new StateComparator<STATE, EVALRET, CLASSES, INPUT>(evaluationFunction, trainingSet));
 
 			// add at the front of states list
 			classifiers.addAll(0, newClassifierStates);
@@ -63,27 +63,25 @@ public class HillClimbClassifierSearch<STATE extends ClassifierState, OPERATOR e
 
 		System.out.println("tries: " + numberOfTries);
 
-		return false;
+		return null;
 	}
 
 	public static class StateComparator<STATE extends ClassifierState, EVALRET extends Comparable<EVALRET>, CLASSES, INPUT extends InputElement<CLASSES>>
 			implements Comparator<STATE> {
 
 		private EvaluationFunction<STATE, EVALRET, CLASSES, INPUT> evaluationFunction;
-		private STATE finalState;
 		private List<INPUT> trainingSet;
 
-		public StateComparator(EvaluationFunction<STATE, EVALRET, CLASSES, INPUT> evaluationFunction, STATE finalState,
+		public StateComparator(EvaluationFunction<STATE, EVALRET, CLASSES, INPUT> evaluationFunction,
 				List<INPUT> trainingSet) {
 			this.evaluationFunction = evaluationFunction;
-			this.finalState = finalState;
 			this.trainingSet = trainingSet;
 		}
 
 		@Override
 		public int compare(STATE stateLeft, STATE stateRight) {
-			EVALRET ls = evaluationFunction.evaluate(stateLeft, finalState, trainingSet);
-			EVALRET rs = evaluationFunction.evaluate(stateRight, finalState, trainingSet);
+			EVALRET ls = evaluationFunction.evaluate(stateLeft, trainingSet);
+			EVALRET rs = evaluationFunction.evaluate(stateRight, trainingSet);
 			return ls.compareTo(rs);
 		}
 
