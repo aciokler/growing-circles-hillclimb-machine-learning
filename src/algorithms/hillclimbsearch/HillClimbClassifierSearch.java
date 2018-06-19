@@ -34,7 +34,7 @@ public class HillClimbClassifierSearch<STATE extends ClassifierState, OPERATOR e
 			STATE state = classifiers.remove(0);
 			if (state.equals(finalClassifierState)) {
 				System.out.println("tries: " + numberOfTries);
-				System.out.println(state);
+				// System.out.println(state);
 				return state;
 			}
 			seenClassifiers.add(state);

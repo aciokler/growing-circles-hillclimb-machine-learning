@@ -8,14 +8,16 @@ public abstract class ClassifierPerformanceTester<STATE extends ClassifierState,
 	public EVALRET test(STATE classifier, List<INPUT> trainingSet,
 			EvaluationFunction<STATE, EVALRET, CLASSES, INPUT> evaluationFunction, double testingSetPercentage) {
 
-		long testingSetCount = Math.round(testingSetPercentage / (double) trainingSet.size());
-
+		long testingSetCount = Math.round(testingSetPercentage * (double) trainingSet.size());
+		System.out.println("testing set count: " + testingSetCount);
 		Random random = new Random(trainingSet.size());
 
 		List<INPUT> availableSet = listProducerCopy(trainingSet);
 		List<INPUT> testingSet = listProducer();
 		do {
-			testingSet.add(availableSet.remove(random.nextInt(availableSet.size())));
+			int index = random.nextInt(availableSet.size());
+			// System.out.println("index: " + index);
+			testingSet.add(availableSet.remove(index));
 		} while (testingSet.size() < testingSetCount);
 
 		return evaluationFunction.evaluate(classifier, testingSet);

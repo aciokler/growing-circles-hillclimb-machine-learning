@@ -39,7 +39,7 @@ public class GrowingCircles {
 			}
 		};
 
-		Double errorRate = tester.test(foundClassifier, trainingSet, new EvaluationOfClassifier(), 0.5);
+		Double errorRate = tester.test(foundClassifier, trainingSet, new EvaluationOfClassifier(), 0.1);
 
 		System.out.println("test error rate: " + errorRate);
 	}
